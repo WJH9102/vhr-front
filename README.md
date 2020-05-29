@@ -2,7 +2,7 @@
 练习项目
 =======
 
-## Project setup 。。。
+## Project setup
 ```
 npm install
 ```
