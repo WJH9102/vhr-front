@@ -21,10 +21,13 @@
       <el-container>
         <el-aside width="200px">
           <el-menu router unique-opened>
-            <template v-for="(item, index) in this.$router.options.routes">
-              <el-submenu index="1" v-if="!item.hidden" :key="index">
+            <template v-for="(item, index) in this.routes">
+              <el-submenu :index="index + ''" v-if="!item.hidden" :key="index">
                 <template slot="title">
-                  <i class="el-icon-location"></i>
+                  <i
+                    style="color: #409eff; margin-right: 10px"
+                    :class="item.iconCls"
+                  ></i>
                   <span>{{ item.name }}</span>
                 </template>
                 <el-menu-item
@@ -37,7 +40,26 @@
             </template>
           </el-menu>
         </el-aside>
-        <el-main><router-view /></el-main>
+        <el-main>
+          <el-breadcrumb
+            separator-class="el-icon-arrow-right"
+            v-if="this.$router.currentRoute.path != '/home'"
+          >
+            <el-breadcrumb-item :to="{ path: '/home' }"
+              >首页</el-breadcrumb-item
+            >
+            <el-breadcrumb-item>{{
+              this.$router.currentRoute.name
+            }}</el-breadcrumb-item>
+          </el-breadcrumb>
+          <div
+            class="homeWelcome"
+            v-if="this.$router.currentRoute.path == '/home'"
+          >
+            欢迎来到微人事！
+          </div>
+          <router-view
+        /></el-main>
       </el-container>
     </el-container>
   </div>
@@ -50,9 +72,32 @@ export default {
       user: JSON.parse(window.sessionStorage.getItem("user"))
     };
   },
+  computed: {
+    routes() {
+      return this.$store.state.routes;
+    }
+  },
   methods: {
-    commandHandler(obj) {
-      console.log(obj);
+    commandHandler(cmd) {
+      if (cmd === "logout") {
+        this.$confirm("此操作将注销登陆，是否继续？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.getRequest("/api/logout");
+            window.sessionStorage.removeItem("user");
+            this.$store.commit("initRoutes", []);
+            this.$router.replace("/");
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消操作"
+            });
+          });
+      }
     }
   },
   created() {}
@@ -60,6 +105,13 @@ export default {
 </script>
 
 <style>
+.homeWelcome {
+  text-align: center;
+  font-size: 30px;
+  font-family: 华文行楷;
+  color: #409eff;
+  padding-top: 50px;
+}
 .homeHeader .title {
   font-size: 30px;
   font-family: 华文行楷;

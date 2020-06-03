@@ -1,7 +1,5 @@
 <template>
-  <div>
-    Test2
-  </div>
+  <div>sysbasic</div>
 </template>
 
 <script>

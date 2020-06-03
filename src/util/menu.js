@@ -4,12 +4,11 @@ export const initMenu = (router, store) => {
   if (store.state.routes.length > 0) {
     return;
   }
-  getRequest("/system/config/menu").then(res => {
+  getRequest("/api/system/config/menu").then(res => {
     if (res.data) {
-      let fmtRoutes = formatRoutes(res.data);
+      let fmtRoutes = formatRoutes(res.data.menus);
       router.addRoutes(fmtRoutes);
       store.commit("initRoutes", fmtRoutes);
-      store.dispatch("connect");
     }
   });
 };
