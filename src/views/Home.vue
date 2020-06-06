@@ -58,8 +58,8 @@
           >
             欢迎来到微人事！
           </div>
-          <router-view
-        /></el-main>
+          <router-view class="homeRouterView" />
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -105,6 +105,9 @@ export default {
 </script>
 
 <style>
+.homeRouterView {
+  margin-top: 12px;
+}
 .homeWelcome {
   text-align: center;
   font-size: 30px;
