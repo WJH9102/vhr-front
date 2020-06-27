@@ -143,10 +143,11 @@ export default {
           }
         )
           .then(() => {
-            this.deleteRequest("/system/basic/department/" + data.id).then(
+            this.deleteRequest("/api/system/basic/department/" + data.id).then(
               resp => {
                 if (resp) {
-                  this.removeDepFromDeps(null, this.deps, data.id);
+                  this.removeDepFromDeps(null, this.depts, data.id);
+                  this.$message.success(resp.msg);
                 }
               }
             );
@@ -181,9 +182,10 @@ export default {
       }
     },
     doAddDep() {
-      this.postRequest("/system/basic/department/", this.dep).then(resp => {
+      this.postRequest("/api/system/basic/department/", this.dep).then(resp => {
         if (resp) {
-          this.addDep2Deps(this.deps, resp.obj);
+          this.$message.success(resp.msg);
+          this.addDep2Deps(this.depts, resp.data);
           this.dialogVisible = false;
           //初始化变量
           this.initDep();
